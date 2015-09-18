@@ -19,6 +19,8 @@ final class VideoObj implements Comparable<VideoObj> {
 	private final int    year;
 	/** <p><b>Invariant:</b> non-null, no leading or final spaces, not empty string </p>*/
 	private final String director;
+	
+	private volatile int hashCode = 0;
 
 	/**
 	 * Initialize all object attributes.
@@ -106,10 +108,20 @@ final class VideoObj implements Comparable<VideoObj> {
 	 * Return a hash code value for this object using the algorithm from Bloch:
 	 * fields are added in the following order: title, year, director.
 	 */
+
+
 	public int hashCode() {
 		// TODO
-		return -1;
-	}
+       if (hashCode == 0) {
+    	   int result = 17;
+           result = 37 * result + title.hashCode();
+              result = 37 * result + year;
+              result = 37 * result + director.hashCode();
+              hashCode = result;
+              }
+              return hashCode;
+}
+
 
 	/**
 	 * Compares the attributes of this object with those of thatObject, in
