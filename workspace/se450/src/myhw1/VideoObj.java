@@ -27,9 +27,37 @@ final class VideoObj implements Comparable<VideoObj> {
 	 */
 	VideoObj(String title, int year, String director) {
 		// TODO
-		this.title = null;
-		this.year = 0;
-		this.director = null;
+		//year invariants
+		if(year <= 1800 || year >= 5000)throw new IllegalArgumentException();
+		//title invariants
+		if(title == null || title.isEmpty()) throw new IllegalArgumentException();
+		char[] charArray = title.toCharArray();
+		int count = 0;
+		for(char c : charArray) {
+			if (c != ' ') break;
+			if (count++ == charArray.length -1) throw new IllegalArgumentException();
+		}
+		//takes off the leading and trailing spaces
+		if(title.charAt(0) == ' ') title = title.substring(1);
+		if(title.charAt(title.length()-1) == ' ') title = title.substring(0, title.length() -1);
+	
+		//if(title.charAt(0) == ' ' || title.charAt(title.length() -1) == ' ')throw new IllegalArgumentException();
+		//director invariants
+		if(director == null || director.isEmpty()) throw new IllegalArgumentException();
+		
+		charArray = director.toCharArray();
+		count = 0;
+		for(char c : charArray) {
+			if (c != ' ') break;
+			if (count++ == charArray.length -1) throw new IllegalArgumentException();
+		}
+		//takes off the leading and trailing spaces
+		if(director.charAt(0) == ' ') director = director.substring(1);
+		if(director.charAt(director.length()-1) == ' ') director = director.substring(0, director.length() -1);
+		
+		this.title = title;
+		this.year = year;
+		this.director = director;
 		 
 	}
 
@@ -38,7 +66,7 @@ final class VideoObj implements Comparable<VideoObj> {
 	 */
 	public String director() {
 		// TODO
-		return "director";
+		return director;
 	}
 
 	/**
@@ -46,7 +74,7 @@ final class VideoObj implements Comparable<VideoObj> {
 	 */
 	public String title() {
 		// TODO
-		return "title";
+		return title;
 	}
 
 	/**
@@ -54,7 +82,7 @@ final class VideoObj implements Comparable<VideoObj> {
 	 */
 	public int year() {
 		// TODO
-		return -1;
+		return year;
 	}
 
 	/**
@@ -64,7 +92,14 @@ final class VideoObj implements Comparable<VideoObj> {
 	 */
 	public boolean equals(Object thatObject) {
 		// TODO
-		return false;
+		if(thatObject == null) return false;
+		if(this.getClass() != thatObject.getClass()) return false;
+		
+		if(thatObject instanceof VideoObj) return 
+				((this.director.equals(((VideoObj)thatObject).director))&&
+						(this.title.equals(((VideoObj)thatObject).title)) &&
+								(this.year == ((VideoObj)thatObject).year)); 
+		else return false;
 	}
 
 	/**
@@ -85,7 +120,18 @@ final class VideoObj implements Comparable<VideoObj> {
 	 */
 	public int compareTo(VideoObj that) {
 		// TODO
-		return -1;
+
+		if(this.title().compareTo(that.title()) < 0 ) return -1; 
+		else if (this.title().compareTo(that.title()) > 0) return 1; 
+		
+		if((this.year() - that.year()) < 0) return -1;
+		else if((this.year() - that.year()) > 0) return 1;
+		
+		if(this.director().compareTo(that.director()) < 0 ) return -1; 
+		else if (this.director().compareTo(that.director()) > 0) return 1; 
+		
+		
+		return 0;
 	}
 
 	/**
@@ -94,6 +140,8 @@ final class VideoObj implements Comparable<VideoObj> {
 	 */
 	public String toString() {
 		// TODO
-		return "El Mariachi (1996) : Rodriguez";
+		String s = "\"" + title + " (" + year + ") : " + director + "\"";
+		return s;
 	}
 }
+

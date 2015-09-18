@@ -1,0 +1,16 @@
+
+public class test {
+	
+	public static void main(String[] args) {
+		String test = " xy ";
+		System.out.println(test);
+		
+		if(test.charAt(0) == ' ') test = test.substring(1);
+		if(test.charAt(test.length()-1) == ' ') test = test.substring(0, test.length() -2);
+		
+		System.out.println(test);
+		
+		
+	}
+
+}

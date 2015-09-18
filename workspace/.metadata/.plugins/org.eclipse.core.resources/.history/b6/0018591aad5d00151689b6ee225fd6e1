@@ -1,0 +1,26 @@
+
+public class test {
+	
+	public static void main(String[] args) {
+		String test2 = "  ";
+		String test = " xy ";
+		System.out.println(test);
+		
+		char[] charArray = test2.toCharArray();
+		System.out.println(charArray.length);
+		int count = 0;
+		for(char c : charArray) {
+			if (c != ' ') break;
+			if (count++ == charArray.length -1) {
+				System.out.println("exception");
+				
+			}
+			
+		}
+		
+		System.out.println(test);
+		
+		
+	}
+
+}

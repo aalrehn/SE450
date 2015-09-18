@@ -1,0 +1,21 @@
+
+public class test {
+	
+	public static void main(String[] args) {
+		String test2 = " ";
+		String test = " xy ";
+		System.out.println(test);
+		
+		char[] charArray = test2.toCharArray();
+		int count = 0;
+		for(char c : charArray) {
+			if (c != ' ') break;
+			if (count++ == charArray.length) throw new IllegalArgumentException();
+		}
+		
+		System.out.println(test);
+		
+		
+	}
+
+}
