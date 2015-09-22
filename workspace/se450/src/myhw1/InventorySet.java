@@ -1,7 +1,8 @@
 package myhw1;
-import java.util.Map;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 // TODO: complete the methods
 /**
@@ -17,6 +18,7 @@ import java.util.Collection;
 final class InventorySet {
 	/** <p><b>Invariant:</b> <code>_data != null</code> </p>*/
 	private final Map<VideoObj,Record> data = new HashMap<VideoObj,Record>();
+	
 
 	InventorySet() { }
 
@@ -25,7 +27,7 @@ final class InventorySet {
 	 */
 	public int size() {
 		// TODO
-		return 0;
+		return data.size();
 	}
 
 	/**
@@ -33,7 +35,11 @@ final class InventorySet {
 	 */
 	public Record get(VideoObj v) {
 		// TODO
-		return null;
+		if(data.containsKey(v)) {
+			return data.get(v).copy();
+		} else {
+			return null;
+		}
 	}
 
 	/**
@@ -43,7 +49,15 @@ final class InventorySet {
 	public Collection<Record> toCollection() {
 		// Recall that an ArrayList is a Collection.
 		// TODO
-		return null;
+		Collection<Record> list = new ArrayList<Record>();
+		Collection<Record> list2 = new ArrayList<Record>();
+		
+		list = data.values();
+		for (Record r : list) {
+			list2.add(r.copy());
+		}
+		
+		return list2;
 	}
 
 	/**
@@ -63,6 +77,22 @@ final class InventorySet {
 	 */
 	public void addNumOwned(VideoObj video, int change) {
 		// TODO
+		int temp;
+		Record workingRecord;
+		
+		if(video == null || change == 0 ||((!data.containsKey(video)) && change < 0)) throw new IllegalArgumentException();
+		if((!data.containsKey(video)) && change > 0) {
+			Record record = new Record(video,change,0,0);
+			data.put(video, record);
+		} else {
+			workingRecord = data.get(video).copy();
+			if(workingRecord.numOwned + change < 0 || (workingRecord.numOwned - workingRecord.numRentals) + change < 0) throw new IllegalArgumentException();
+				data.get(video).numOwned = workingRecord.numOwned + change;
+				if(data.get(video).numOwned == 0) {
+					data.remove(video);
+				}
+		}
+		
 	}
 
 	/**
@@ -73,7 +103,10 @@ final class InventorySet {
 	 * <p><b>Postcondition:</b> changes the record for the video</p>
 	 */
 	public void checkOut(VideoObj video) {
-		// TODO
+		if(!data.containsKey(video) || data.get(video).numOut == data.get(video).numOwned) throw new IllegalArgumentException();
+			Record workingRecord = data.get(video);
+			workingRecord.numOut += 1;
+			workingRecord.numRentals += 1;
 	}
 
 	/**
@@ -85,6 +118,10 @@ final class InventorySet {
 	 */
 	public void checkIn(VideoObj video) {
 		// TODO
+		if(!data.containsKey(video) || data.get(video).numOut <= 0 ) throw new IllegalArgumentException();
+			Record workingRecord = data.get(video);
+			workingRecord.numOut -= 1;
+			
 	}
 
 	/**
@@ -93,6 +130,7 @@ final class InventorySet {
 	 */
 	public void clear() {
 		// TODO
+		data.clear();
 	}
 
 	/**
